@@ -1,0 +1,27 @@
+# demo1.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo1-argo-appset
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - namespace: dev
+      - namespace: test
+  template:
+    metadata:
+      name: '{{namespace}}-app'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/szwangjd2010/argocd-lab.git
+        targetRevision: HEAD
+        path: dev
+      destination: 
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
