@@ -21,7 +21,7 @@ spec:
         path: dev
       destination: 
         server: https://kubernetes.default.svc
-        namespace: '{{namespace}}'
+        namespace: '{{namespace}}-demo'
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
