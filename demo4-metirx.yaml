@@ -1,0 +1,38 @@
+# demo4.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo4-argo-appset
+  namespace: argocd
+spec:
+  generators:
+  - matrix:
+      generators:
+      - clusters: {}
+      - list:
+          elements:
+          - color: red
+            size: middle
+          - color: blue
+            size: large
+  template:
+    metadata:
+      name: '{{name}}-{{color}}-app'
+      namespace: '{{color}}-{{size}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/szwangjd2010/argocd-lab.git
+        targetRevision: HEAD
+        path: 'dev'
+      destination: 
+        server: '{{server}}'
+        namespace: '{{color}}-{{size}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+      info:
+        - name: color
+          value: '{{color}}'
+        - name: size
+          value: '{{size}}'
